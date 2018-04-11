@@ -2,6 +2,8 @@ const superagent = require('superagent');
 const superagentJsonapify = require('superagent-jsonapify');
 const Datastore = require('nedb');
 
+const { capitalize } = require('lodash');
+
 const { mbtaKey } = require('../../../config');
 
 superagentJsonapify(superagent);
@@ -13,10 +15,13 @@ const routeDb = new Datastore({
   autoload: true,
 });
 
-const fetchRoute = routeId => new Promise((resolve) => {
-  routeDb.findOne({ routeId }, (err, doc) => {
+const fetchRoute = routeId => new Promise((resolve, reject) => {
+  const standardizedId = capitalize(routeId);
+
+  routeDb.findOne({ routeId: standardizedId }, (err, doc) => {
     if (doc) {
-      resolve(doc.data);
+      resolve(doc);
+      return;
     }
 
     const query = {};
@@ -24,13 +29,21 @@ const fetchRoute = routeId => new Promise((resolve) => {
       query.api_key = mbtaKey;
     }
 
-    superagent.get(`${base}/routes/${routeId}`)
+    superagent.get(`${base}/routes/${standardizedId}`)
       .query(query)
       .then(response => response.body.data)
       .then((data) => {
-        routeDb.insert({ routeId, data });
-        resolve(data);
-      });
+        const { longName, shortName, type } = data;
+        let routeName = longName || shortName;
+        if (type === 3) {
+          routeName = `Bus ${shortName}`;
+        }
+
+        const newDoc = { routeId: standardizedId, routeName, data };
+        routeDb.insert(newDoc);
+        resolve(newDoc);
+      })
+      .catch(reject);
   });
 });
 

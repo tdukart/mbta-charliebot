@@ -4,6 +4,7 @@
   "description": "MBTA alert bot for Slack",
   "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src"
@@ -15,7 +16,9 @@
     "url": "https://github.com/tdukart/mbta-charliebot.git"
   },
   "dependencies": {
+    "@slack/client": "^4.1.0",
     "ajax-request": "^1.2.3",
+    "express": "^4.16.3",
     "lodash": "^4.17.5",
     "nedb": "^1.8.0",
     "slack": "^11.0.0",
