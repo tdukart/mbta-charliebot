@@ -1,4 +1,10 @@
-const parseAlert = (routeName, { serviceEffect, description, header, url, severity }) => {
+const parseAlert = (routeName, {
+  serviceEffect,
+  description,
+  header,
+  url,
+  severity,
+}) => {
   const parsed = {
     severity,
   };
@@ -16,7 +22,6 @@ const parseAlert = (routeName, { serviceEffect, description, header, url, severi
   if (serviceEffect) {
     parsed.title += `: ${serviceEffect}`;
   }
-  console.log(parsed);
   return parsed;
 };
 

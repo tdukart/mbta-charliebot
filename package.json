@@ -4,7 +4,9 @@
   "description": "MBTA alert bot for Slack",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src"
   },
   "author": "Todd Dukart <todd.dukart@globe.com>",
   "license": "UNLICENSED",
@@ -22,6 +24,8 @@
     "superagent-jsonapify": "^1.4.5"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0"
   }
 }

@@ -1,6 +1,8 @@
 const SlackWebhook = require('slack-webhook');
 
-const pushToSlack = (webhookUrl, { channel = '', title = '', text, severity = null }) => {
+const pushToSlack = (webhookUrl, {
+  channel = '', title = '', text, severity = null,
+}) => {
   const slackHook = new SlackWebhook(webhookUrl);
 
   const messageData = {};
@@ -16,7 +18,7 @@ const pushToSlack = (webhookUrl, { channel = '', title = '', text, severity = nu
           fallback: text,
           text,
         },
-      ]
+      ];
     } else if (severity < 7) {
       messageData.attachments = [
         {
@@ -25,7 +27,7 @@ const pushToSlack = (webhookUrl, { channel = '', title = '', text, severity = nu
           color: 'warning',
           text,
         },
-      ]
+      ];
     } else {
       messageData.attachments = [
         {
@@ -34,7 +36,7 @@ const pushToSlack = (webhookUrl, { channel = '', title = '', text, severity = nu
           color: 'danger',
           text,
         },
-      ]
+      ];
     }
   } else {
     messageData.text = text;

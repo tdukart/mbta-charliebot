@@ -8,7 +8,7 @@ const { webhookUrl } = require('../config');
 const routes = [
   'Red',
   'Green-D',
-  '741', //Silver Line SL1
+  '741', // Silver Line SL1
   'CR-Greenbush',
   '225',
 ];
@@ -16,7 +16,5 @@ const routes = [
 routes.forEach((route) => {
   charlieBot
     .fetch(route)
-    .then((alerts) => {
-      return alerts.map(alert => pushToSlack(webhookUrl, alert));
-    });
+    .then(alerts => alerts.map(alert => pushToSlack(webhookUrl, alert)));
 });

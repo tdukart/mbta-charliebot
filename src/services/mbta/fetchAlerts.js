@@ -9,7 +9,7 @@ const base = 'https://api-v3.mbta.com';
 
 function fetchAlerts(route) {
   const query = {
-    'filter[route]': route
+    'filter[route]': route,
   };
   if (mbtaKey) {
     query.api_key = mbtaKey;
@@ -17,7 +17,7 @@ function fetchAlerts(route) {
 
   return superagent.get(`${base}/alerts`)
     .query(query)
-    .then((response) => response.body.data);
+    .then(response => response.body.data);
 }
 
 module.exports = fetchAlerts;

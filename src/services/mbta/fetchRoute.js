@@ -13,10 +13,10 @@ const routeDb = new Datastore({
   autoload: true,
 });
 
-const fetchRoute = (routeId) => new Promise((resolve) => {
+const fetchRoute = routeId => new Promise((resolve) => {
   routeDb.findOne({ routeId }, (err, doc) => {
     if (doc) {
-      return doc.data;
+      resolve(doc.data);
     }
 
     const query = {};
@@ -26,7 +26,7 @@ const fetchRoute = (routeId) => new Promise((resolve) => {
 
     superagent.get(`${base}/routes/${routeId}`)
       .query(query)
-      .then((response) => response.body.data)
+      .then(response => response.body.data)
       .then((data) => {
         routeDb.insert({ routeId, data });
         resolve(data);

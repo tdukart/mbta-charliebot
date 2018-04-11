@@ -25,18 +25,23 @@ class CharlieBot {
       .then(({ longName, shortName, type }) => {
         let routeName = longName || shortName;
         if (type === 3) {
-          routeName = `Bus ${shortName}`
+          routeName = `Bus ${shortName}`;
         }
         return fetchAlerts(route)
           .then((alerts) => {
-            const alertPromises = alerts.map((alert) => new Promise((resolve) => {
+            const alertPromises = alerts.map(alert => new Promise((resolve) => {
               const { id: alertId, updated_at: updatedAt } = alert;
               alertsDb.findOne({ alertId, route }, (err, doc) => {
                 if (!doc || doc.updatedAt !== updatedAt) {
                   if (!doc) {
-                    alertsDb.insert({ alertId, route, alert, updatedAt });
+                    alertsDb.insert({
+                      alertId, route, alert, updatedAt,
+                    });
                   } else {
-                    alertsDb.update(doc._id, { alertId, route, alert, updatedAt });
+                    // eslint-disable-next-line no-underscore-dangle
+                    alertsDb.update(doc._id, {
+                      alertId, route, alert, updatedAt,
+                    });
                   }
                   resolve(alert);
                 } else {
@@ -49,7 +54,7 @@ class CharlieBot {
           })
           .then(alerts => filter(alerts))
           .then(alerts => alerts.map(alert => parseAlert(routeName, alert)));
-      })
+      });
   }
 }
 
