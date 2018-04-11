@@ -35,12 +35,16 @@ class CharlieBot {
                 if (!doc || doc.updatedAt !== updatedAt) {
                   if (!doc) {
                     alertsDb.insert({
-                      alertId, route, alert, updatedAt,
+                      alertId,
+                      route,
+                      updatedAt,
                     });
                   } else {
                     // eslint-disable-next-line no-underscore-dangle
                     alertsDb.update(doc._id, {
-                      alertId, route, alert, updatedAt,
+                      alertId,
+                      route,
+                      updatedAt,
                     });
                   }
                   resolve(alert);

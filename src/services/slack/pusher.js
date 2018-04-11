@@ -1,16 +1,19 @@
-const SlackWebhook = require('slack-webhook');
+const slack = require('slack');
+const { slackBotToken } = require('../../../config');
 
-const pushToSlack = (webhookUrl, {
-  channel = '', title = '', text, severity = null,
+const pushToSlack = ({
+  channel = '',
+  title = '',
+  text,
+  severity = null,
 }) => {
-  const slackHook = new SlackWebhook(webhookUrl);
-
   const messageData = {};
   if (channel) {
     messageData.channel = channel;
   }
 
   if (severity !== null) {
+    messageData.text = '';
     if (severity < 4) {
       messageData.attachments = [
         {
@@ -42,7 +45,10 @@ const pushToSlack = (webhookUrl, {
     messageData.text = text;
   }
 
-  return slackHook.send(messageData);
+  return slack.chat.postMessage({
+    token: slackBotToken,
+    ...messageData,
+  });
 };
 
 module.exports = pushToSlack;
