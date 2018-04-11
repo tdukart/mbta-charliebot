@@ -8,6 +8,10 @@
   },
   "author": "Todd Dukart <todd.dukart@globe.com>",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tdukart/mbta-charliebot.git"
+  },
   "dependencies": {
     "ajax-request": "^1.2.3",
     "lodash": "^4.17.5",
