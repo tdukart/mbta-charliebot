@@ -1,0 +1,23 @@
+{
+  "name": "charliebot",
+  "version": "1.0.0",
+  "description": "MBTA alert bot for Slack",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Todd Dukart <todd.dukart@globe.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ajax-request": "^1.2.3",
+    "lodash": "^4.17.5",
+    "nedb": "^1.8.0",
+    "slack": "^11.0.0",
+    "slack-webhook": "^1.0.0",
+    "superagent": "^3.8.2",
+    "superagent-jsonapify": "^1.4.5"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  }
+}
