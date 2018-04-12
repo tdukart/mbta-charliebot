@@ -12,7 +12,7 @@ const express = require('express');
 const { WebClient } = require('@slack/client');
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
