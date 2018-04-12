@@ -10,9 +10,10 @@ const connectToDatabase = new Promise((resolve) => {
       const mongoDb = client.db();
       resolve(mongoDb);
     });
+  } else {
+    console.log('Using local database');
+    resolve('local');
   }
-  console.log('Using local database');
-  resolve('local');
 });
 
 const dbConnect = collectionName => new Promise((resolve) => {
