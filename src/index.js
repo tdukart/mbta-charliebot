@@ -9,7 +9,7 @@ const refreshAlerts = require('./services/refreshAlerts');
 const activeConnections = [];
 
 const express = require('express');
-const slack = require('slack');
+const { WebClient } = require('@slack/client');
 
 const app = express();
 const PORT = 8080;
@@ -34,7 +34,9 @@ app.get('/oauth', (req, res) => {
   } else {
     // If it's there...
 
-    slack.oauth.access({
+    const webClient = new WebClient();
+
+    webClient.oauth.access({
       code: req.query.code,
       client_id: slackClientId,
       client_secret: slackClientSecret,
