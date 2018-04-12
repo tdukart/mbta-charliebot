@@ -7,7 +7,7 @@ const connectToDatabase = new Promise((resolve) => {
   if (mongodbUri) {
     console.log('attempting to connect to MongoDb');
     MongoClient.connect(mongodbUri, (err, client) => {
-      const mongoDb = client.db('charliebot');
+      const mongoDb = client.db();
       resolve(mongoDb);
     });
   }
