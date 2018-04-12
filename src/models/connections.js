@@ -1,8 +1,45 @@
-const Datastore = require('nedb');
+const dbConnect = require('../services/dbConnect');
 
-const connectionDb = new Datastore({
-  filename: 'data/connections.db',
-  autoload: true,
+const db = dbConnect('connections');
+
+const getAllConnections = () => new Promise((resolve, reject) => {
+  db.then((collection) => {
+    collection.find({}, (err, connections) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(connections);
+      }
+    });
+  });
 });
 
-module.exports = { db: connectionDb };
+const addConnection = connectionData => new Promise((resolve, reject) => {
+  db.then((collection) => {
+    collection.insert(connectionData, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+});
+
+const findConnectionsById = connectionIds => new Promise((resolve, reject) => {
+  db.then((collection) => {
+    collection.find({ _id: { $in: connectionIds } }, (err, connections) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(connections);
+      }
+    });
+  });
+});
+
+module.exports = {
+  getAllConnections,
+  addConnection,
+  findConnectionsById,
+};

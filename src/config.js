@@ -6,7 +6,7 @@ const snakeCase = require('snake-case');
 
 let config = {};
 
-const configVars = ['mbtaKey', 'slackClientId', 'slackClientSecret'];
+const configVars = ['mbtaKey', 'slackClientId', 'slackClientSecret', 'mongodbUri'];
 
 const configFilePath = path.join(__dirname, '../config.json');
 

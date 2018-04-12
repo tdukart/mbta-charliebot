@@ -1,51 +1,63 @@
-const Datastore = require('nedb');
 const { filter, keyBy, map } = require('lodash');
-const { db: connectionDb } = require('./connections');
 
-const subscriptionDb = new Datastore({
-  filename: 'data/subscriptions.db',
-  autoload: true,
-});
+const dbConnect = require('../services/dbConnect');
+const { findConnectionsById } = require('./connections');
+
+const db = dbConnect('subscriptions');
 
 const createSubscription = ({ connectionId, channel, route }) => new Promise((resolve, reject) => {
-  subscriptionDb.insert({
-    connectionId,
-    channel,
-    route,
-  }, (err, data) => {
-    if (err) {
-      reject(err);
-    } else {
-      resolve(data);
-    }
+  db.then((collection) => {
+    collection.insert({
+      connectionId,
+      channel,
+      route,
+    }, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
   });
 });
 
 const removeSubscription = ({ connectionId, channel, route }) => new Promise((resolve, reject) => {
-  // eslint-disable-next-line no-underscore-dangle
-  subscriptionDb.remove({
-    connectionId,
-    channel,
-    route,
-  }, (removeErr, removeData) => {
-    if (removeErr) {
-      reject(removeErr);
-    } else {
-      resolve(removeData);
-    }
+  db.then((collection) => {
+    // eslint-disable-next-line no-underscore-dangle
+    collection.remove({
+      connectionId,
+      channel,
+      route,
+    }, (removeErr, removeData) => {
+      if (removeErr) {
+        reject(removeErr);
+      } else {
+        resolve(removeData);
+      }
+    });
+  });
+});
+
+const findAllSubscriptions = () => new Promise((resolve, reject) => {
+  db.then((collection) => {
+    collection.find({}, (subscriptionErr, subscriptions) => {
+      if (subscriptionErr) {
+        reject(subscriptionErr);
+      } else {
+        resolve(subscriptions);
+      }
+    });
   });
 });
 
 const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
-  subscriptionDb.find({ route }, (subscriptionErr, subscriptions) => {
-    if (subscriptionErr) {
-      reject(subscriptionErr);
-    } else {
-      const connectionIds = map(subscriptions, 'connectionId');
-      connectionDb.find({ _id: { $in: connectionIds } }, (connectionErr, connections) => {
-        if (connectionErr) {
-          reject(connectionErr);
-        } else {
+  db.then((collection) => {
+    collection.find({ route }, (subscriptionErr, subscriptions) => {
+      if (subscriptionErr) {
+        reject(subscriptionErr);
+      } else {
+        const connectionIds = map(subscriptions, 'connectionId');
+        findConnectionsById(connectionIds).then((connections) => {
           const keyedConnections = keyBy(connections, '_id');
           const joinedSubscriptions = filter(map(subscriptions, (subscription) => {
             const connection = keyedConnections[subscription.connectionId];
@@ -61,15 +73,15 @@ const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
           }));
 
           resolve(joinedSubscriptions);
-        }
-      });
-    }
+        });
+      }
+    });
   });
 });
 
 module.exports = {
-  db: subscriptionDb,
   createSubscription,
   removeSubscription,
+  findAllSubscriptions,
   findSubscriptionsForRoute,
 };

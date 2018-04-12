@@ -2,7 +2,7 @@ const SlackConnection = require('./classes/SlackConnection');
 
 const { slackClientId, slackClientSecret } = require('./config');
 
-const { db: connectionDb } = require('./models/connections');
+const { addConnection, getAllConnections } = require('./models/connections');
 
 const refreshAlerts = require('./services/refreshAlerts');
 
@@ -41,7 +41,7 @@ app.get('/oauth', (req, res) => {
       client_id: slackClientId,
       client_secret: slackClientSecret,
     }).then((body) => {
-      connectionDb.insert(body);
+      addConnection(body);
       res.json('All set! Return to Slack.');
       activeConnections.push(new SlackConnection(body));
     }).catch((error) => {
@@ -64,11 +64,12 @@ app.get('/refresh', (req, res) => {
     });
 });
 
-connectionDb.find({}, (err, connectionList) => {
-  connectionList.forEach((connectionData) => {
-    activeConnections.push(new SlackConnection(connectionData));
+getAllConnections()
+  .then((connectionList) => {
+    connectionList.forEach((connectionData) => {
+      activeConnections.push(new SlackConnection(connectionData));
+    });
   });
-});
 
 process.on('beforeExit', () => {
   activeConnections.forEach(connection => connection.close());

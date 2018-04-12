@@ -11,7 +11,7 @@ superagentJsonapify(superagent);
 const base = 'https://api-v3.mbta.com';
 
 const routeDb = new Datastore({
-  filename: 'data/routes.db',
+  inMemoryOnly: true,
   autoload: true,
 });
 
