@@ -1,5 +1,5 @@
 const Datastore = require('nedb');
-const { keyBy, map } = require('lodash');
+const { filter, keyBy, map } = require('lodash');
 const { db: connectionDb } = require('./connections');
 
 const subscriptionDb = new Datastore({
@@ -47,9 +47,17 @@ const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
           reject(connectionErr);
         } else {
           const keyedConnections = keyBy(connections, '_id');
-          const joinedSubscriptions = map(subscriptions, subscription => ({
-            botAccessToken: keyedConnections[subscription.connectionId].bot.bot_access_token,
-            ...subscription,
+          const joinedSubscriptions = filter(map(subscriptions, (subscription) => {
+            const connection = keyedConnections[subscription.connectionId];
+            if (!connection) {
+              // eslint-disable-next-line no-underscore-dangle,no-console
+              console.error('No connection found for subscription', subscription._id);
+              return false;
+            }
+            return ({
+              botAccessToken: connection.bot.bot_access_token,
+              ...subscription,
+            });
           }));
 
           resolve(joinedSubscriptions);
