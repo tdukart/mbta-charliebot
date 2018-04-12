@@ -41,9 +41,11 @@ app.get('/oauth', (req, res) => {
       client_id: slackClientId,
       client_secret: slackClientSecret,
     }).then((body) => {
-      addConnection(body);
-      res.json('All set! Return to Slack.');
-      activeConnections.push(new SlackConnection(body));
+      addConnection(body).then((writeResult) => {
+        res.json('All set! Return to Slack.');
+        // eslint-disable-next-line no-underscore-dangle
+        activeConnections.push(new SlackConnection({ ...body, _id: writeResult._id }));
+      });
     }).catch((error) => {
       // eslint-disable-next-line no-console
       console.error(error);

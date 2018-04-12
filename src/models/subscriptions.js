@@ -44,7 +44,7 @@ const findAllSubscriptions = () => new Promise((resolve, reject) => {
       if (subscriptionErr) {
         reject(subscriptionErr);
       } else {
-        resolve(subscriptions);
+        resolve(subscriptions.toArray());
       }
     });
   });
@@ -52,10 +52,11 @@ const findAllSubscriptions = () => new Promise((resolve, reject) => {
 
 const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
   db.then((collection) => {
-    collection.find({ route }, (subscriptionErr, subscriptions) => {
+    collection.find({ route }, (subscriptionErr, subscriptionCursor) => {
       if (subscriptionErr) {
         reject(subscriptionErr);
       } else {
+        const subscriptions = subscriptionCursor.toArray();
         const connectionIds = map(subscriptions, 'connectionId');
         findConnectionsById(connectionIds).then((connections) => {
           const keyedConnections = keyBy(connections, '_id');

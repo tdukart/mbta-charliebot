@@ -4,7 +4,7 @@ const db = dbConnect('alerts');
 
 const findAlertById = alertId => new Promise((resolve, reject) => {
   db.then((collection) => {
-    collection.findOne(alertId, (err, alert) => {
+    collection.findOne({ alertId }, (err, alert) => {
       if (err) {
         reject(err);
       } else {
@@ -28,7 +28,7 @@ const addAlert = alertData => new Promise((resolve, reject) => {
 
 const updateAlert = (alertId, alertData) => new Promise((resolve, reject) => {
   db.then((collection) => {
-    collection.update({ _id: alertId }, alertData, (err, result) => {
+    collection.update({ alertId }, alertData, (err, result) => {
       if (err) {
         reject(err);
       } else {

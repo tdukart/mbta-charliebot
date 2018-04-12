@@ -32,7 +32,7 @@ const findConnectionsById = connectionIds => new Promise((resolve, reject) => {
       if (err) {
         reject(err);
       } else {
-        resolve(connections);
+        resolve(connections.toArray());
       }
     });
   });
