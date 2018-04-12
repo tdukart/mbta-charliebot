@@ -7,9 +7,14 @@ superagentJsonapify(superagent);
 
 const base = 'https://api-v3.mbta.com';
 
-function fetchAlerts(route) {
+/**
+ * Fetches the alerts for a given route.
+ * @param {string} routeId The route ID.
+ * @returns {Promise<Array>}
+ */
+function fetchAlerts(routeId) {
   const query = {
-    'filter[route]': route,
+    'filter[route]': routeId,
   };
   if (mbtaKey) {
     query.api_key = mbtaKey;
