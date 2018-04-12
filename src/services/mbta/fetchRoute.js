@@ -15,6 +15,11 @@ const routeDb = new Datastore({
   autoload: true,
 });
 
+/**
+ * Fetch a route.
+ * @param {string} routeId The route ID.
+ * @returns {Promise<any>}
+ */
 const fetchRoute = routeId => new Promise((resolve, reject) => {
   const standardizedId = capitalize(routeId);
 

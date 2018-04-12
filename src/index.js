@@ -1,34 +1,11 @@
-const CharlieBot = require('./App');
-const pushToSlack = require('./services/slack/pusher');
-
 const SlackConnection = require('./classes/SlackConnection');
 
 const { slackClientId, slackClientSecret } = require('../config');
 
-const Datastore = require('nedb');
-
-const connectionDb = new Datastore({
-  filename: 'data/connections.db',
-  autoload: true,
-});
-
-const charlieBot = new CharlieBot();
+const { db: connectionDb } = require('./models/connections');
+const sendAlertsForRoute = require('./services/sendAlertsForRoute');
 
 const activeConnections = [];
-
-const silverLineRoutes = [
-  '741', // SL1
-  '742', // SL2
-  '743', // SL3
-  '751', // SL4
-  '749', // SL5
-];
-
-silverLineRoutes.forEach((route) => {
-  charlieBot
-    .fetch(route)
-    .then(alerts => alerts.map(alert => pushToSlack({ channel: 'silver-line-test', ...alert })));
-});
 
 const express = require('express');
 const slack = require('slack');
@@ -63,6 +40,7 @@ app.get('/oauth', (req, res) => {
     }).then((body) => {
       connectionDb.insert(body);
       res.json('All set! Return to Slack.');
+      activeConnections.push(new SlackConnection(body));
     }).catch((error) => {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -70,6 +48,11 @@ app.get('/oauth', (req, res) => {
       res.send({ Error: 'OAuth error' });
     });
   }
+});
+
+app.get('/refresh', (req, res) => {
+  sendAlertsForRoute('Red');
+  res.send('Refreshing Red Line alerts...');
 });
 
 connectionDb.find({}, (err, connectionList) => {

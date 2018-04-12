@@ -1,4 +1,6 @@
 const Datastore = require('nedb');
+const { keyBy, map } = require('lodash');
+const { db: connectionDb } = require('./connections');
 
 const subscriptionDb = new Datastore({
   filename: 'data/subscriptions.db',
@@ -35,11 +37,26 @@ const removeSubscription = ({ connectionId, channel, route }) => new Promise((re
 });
 
 const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
-  subscriptionDb.find({ route }, (err, data) => {
-    if (err) {
-      reject(err);
+  subscriptionDb.find({ route }, (subscriptionErr, subscriptions) => {
+    if (subscriptionErr) {
+      reject(subscriptionErr);
     } else {
-      resolve(data);
+      const connectionIds = map(subscriptions, 'connectionId');
+      connectionDb.find({ _id: { $in: connectionIds } }, (connectionErr, connections) => {
+        if (connectionErr) {
+          reject(connectionErr);
+        } else {
+          const keyedConnections = keyBy(connections, '_id');
+          const joinedSubscriptions = map(subscriptions, (subscription) => {
+            return {
+              botAccessToken: keyedConnections[subscription.connectionId].bot.bot_access_token,
+              ...subscription,
+            };
+          });
+
+          resolve(joinedSubscriptions);
+        }
+      });
     }
   });
 });
