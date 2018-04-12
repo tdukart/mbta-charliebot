@@ -59,4 +59,9 @@ const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = { createSubscription, removeSubscription, findSubscriptionsForRoute };
+module.exports = {
+  db: subscriptionDb,
+  createSubscription,
+  removeSubscription,
+  findSubscriptionsForRoute,
+};

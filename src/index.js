@@ -3,7 +3,8 @@ const SlackConnection = require('./classes/SlackConnection');
 const { slackClientId, slackClientSecret } = require('../config');
 
 const { db: connectionDb } = require('./models/connections');
-const sendAlertsForRoute = require('./services/sendAlertsForRoute');
+
+const refreshAlerts = require('./services/refreshAlerts');
 
 const activeConnections = [];
 
@@ -51,8 +52,14 @@ app.get('/oauth', (req, res) => {
 });
 
 app.get('/refresh', (req, res) => {
-  sendAlertsForRoute('Red');
-  res.send('Refreshing Red Line alerts...');
+  refreshAlerts()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(500);
+      res.send({ err });
+    });
 });
 
 connectionDb.find({}, (err, connectionList) => {
