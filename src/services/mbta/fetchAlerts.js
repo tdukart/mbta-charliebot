@@ -1,7 +1,7 @@
 const superagent = require('superagent');
 const superagentJsonapify = require('superagent-jsonapify');
 
-const { mbtaKey } = require('../../../config');
+const { mbtaKey } = require('../../config');
 
 superagentJsonapify(superagent);
 

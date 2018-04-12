@@ -20,6 +20,7 @@
     "express": "^4.16.3",
     "lodash": "^4.17.5",
     "nedb": "^1.8.0",
+    "snake-case": "^2.1.0",
     "superagent": "^3.8.2",
     "superagent-jsonapify": "^1.4.5"
   },

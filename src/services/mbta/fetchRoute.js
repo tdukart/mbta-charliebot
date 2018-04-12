@@ -4,7 +4,7 @@ const Datastore = require('nedb');
 
 const { capitalize } = require('lodash');
 
-const { mbtaKey } = require('../../../config');
+const { mbtaKey } = require('../../config');
 
 superagentJsonapify(superagent);
 

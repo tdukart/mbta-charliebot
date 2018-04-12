@@ -1,6 +1,6 @@
 const SlackConnection = require('./classes/SlackConnection');
 
-const { slackClientId, slackClientSecret } = require('../config');
+const { slackClientId, slackClientSecret } = require('./config');
 
 const { db: connectionDb } = require('./models/connections');
 
