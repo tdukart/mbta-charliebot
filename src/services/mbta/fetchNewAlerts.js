@@ -43,8 +43,6 @@ const fetchNewAlerts = routeId => fetchRoute(routeId)
           });
         }));
 
-        console.log(`Parsing ${alerts.length} alerts`);
-
         return Promise.all(alertPromises);
       })
       .then(alerts => filter(alerts))

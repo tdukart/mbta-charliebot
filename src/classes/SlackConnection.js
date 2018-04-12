@@ -45,11 +45,14 @@ class SlackConnection {
       if (subscribeMatch) {
         fetchRoute(subscribeMatch[1].trim())
           .then((route) => {
-            const subscriptionData = { connectionId: this.connectionId, channel, route: route.routeId };
+            const subscriptionData = {
+              connectionId: this.connectionId,
+              channel,
+              route: route.routeId,
+            };
             createSubscription(subscriptionData)
               .then(() => {
                 sendMessage(`You have subscribed to ${route.routeName}.`);
-                console.log('Subscription processed', subscriptionData);
               });
           })
           .catch(() => {

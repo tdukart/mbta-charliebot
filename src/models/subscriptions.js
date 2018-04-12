@@ -47,12 +47,10 @@ const findSubscriptionsForRoute = route => new Promise((resolve, reject) => {
           reject(connectionErr);
         } else {
           const keyedConnections = keyBy(connections, '_id');
-          const joinedSubscriptions = map(subscriptions, (subscription) => {
-            return {
-              botAccessToken: keyedConnections[subscription.connectionId].bot.bot_access_token,
-              ...subscription,
-            };
-          });
+          const joinedSubscriptions = map(subscriptions, subscription => ({
+            botAccessToken: keyedConnections[subscription.connectionId].bot.bot_access_token,
+            ...subscription,
+          }));
 
           resolve(joinedSubscriptions);
         }
