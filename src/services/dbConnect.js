@@ -5,11 +5,13 @@ const { mongodbUri } = require('../config');
 
 const connectToDatabase = new Promise((resolve) => {
   if (mongodbUri) {
+    console.log('attempting to connect to MongoDb');
     MongoClient.connect(mongodbUri, (err, client) => {
       const mongoDb = client.db('charliebot');
       resolve(mongoDb);
     });
   }
+  console.log('Using local database');
   resolve('local');
 });
 
