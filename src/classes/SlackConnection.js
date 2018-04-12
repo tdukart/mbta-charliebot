@@ -28,7 +28,7 @@ class SlackConnection {
         text,
       } = message;
 
-      const sendMessage = (messageToSend) => this.rtmClient.sendMessage(messageToSend, channel);
+      const sendMessage = messageToSend => this.rtmClient.sendMessage(messageToSend, channel);
 
       // Skip messages that are from a bot or my own user ID
       if ((subtype && subtype === 'bot_message') ||
