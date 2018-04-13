@@ -20,6 +20,18 @@ class SlackConnection {
   }
 
   addListeners() {
+    this.rtmClient.on('member_joined_channel', (event) => {
+      const { user, channel } = event;
+
+      if (user === this.bot.bot_user_id) {
+        this.rtmClient.sendMessage(
+          'Hi there! I\'m still in development, so please expect some weirdness. (As of this ' +
+          'moment, I\'m not quite set up to send regular updates either.)',
+          channel,
+        );
+      }
+    });
+
     this.rtmClient.on('message', (message) => {
       const {
         subtype,
