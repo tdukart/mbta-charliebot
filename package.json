@@ -31,6 +31,6 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.18.0",
-    "heroku-cli": "^6.16.12"
+    "heroku-cli": "^7.0.9"
   }
 }
