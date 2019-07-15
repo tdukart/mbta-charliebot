@@ -27,7 +27,7 @@
     "superagent-jsonapify": "^1.4.5"
   },
   "devDependencies": {
-    "cli-engine-command": "^8.0.0",
+    "cli-engine-command": "^9.0.7",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.18.0",
