@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "cli-engine-command": "^9.0.7",
-    "eslint": "^4.19.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
     "heroku-cli": "^7.0.9"
